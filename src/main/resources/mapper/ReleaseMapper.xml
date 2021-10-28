@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.codeforge.codeforgeDemo.mapper.ReleaseMapper">
+    <select id="getAllReleases" resultMap="releaseMap">
+        <bind name="pattern" value="'%' + name + '%'" />
+        SELECT * FROM Release
+        <if test="status != null">
+            WHERE Status = #{status}
+            <if test = "releaseDate != null">
+                AND "releaseDate" = #{releaseDate}
+            </if>
+        </if>
+
+        <if test = "releaseDate != null and status == null">
+            WHERE "releaseDate" = #{releaseDate}
+        </if>
+
+        <if test = "releaseDate == null and status == null and name != null">
+            WHERE Name LIKE #{pattern}
+        </if>
+
+        <if test="rows != null">
+            LIMIT #{rows}
+        </if>
+    </select>
+
+    <resultMap id="releaseMap" type="com.codeforge.codeforgeDemo.model.dto.Release" autoMapping="true">
+        <id property="id" column="Id"/>
+        <id property="name" column="Name"/>
+        <id property="status" column="Status"/>
+        <id property="description" column="Description"/>
+        <id property="createdAt" column="CreatedAt"/>
+        <id property="lastUpdateAt" column="LastUpdateAt"/>
+        <id property="releaseDate" column="ReleaseDate"/>
+    </resultMap>
+
+    <select id="getReleaseById" resultType="Release" parameterType="int">
+        SELECT * FROM Release WHERE Id = #{id}
+    </select>
+
+    <insert id="insertRelease" parameterType="Release">
+        INSERT INTO
+        Release(Name, Description, Status, "releaseDate") values(#{name},#{description}, #{status}, #{releaseDate})
+    </insert>
+
+    <update id="updateRelease" parameterType="Release">
+        UPDATE Release SET Name = #{name}, Description = #{description}, "lastUpdateAt" = CURRENT_TIMESTAMP
+        WHERE Id = #{id}
+    </update>
+
+    <delete id="deleteReleaseById" parameterType="int">
+        DELETE FROM Release WHERE Id = #{id}
+    </delete>
+</mapper>
