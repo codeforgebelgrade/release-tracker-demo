@@ -1,29 +1,31 @@
 package com.codeforge.codeforgeDemo.model.dto;
 
-import javax.print.attribute.standard.DateTimeAtProcessing;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.Date;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Release {
 
     private int id;
-    private String name;
-    private String description;
-    private String status;
-    private Date releaseDate;
+    private String releaseName;
+    private String releaseDescription;
+    private String releaseStatus;
+    private String releaseDate;
     private Date lastUpdateAt;
     private Date createdAt;
 
-    public String getStatus() {
-        return status;
+    public String getReleaseStatus() {
+        return releaseStatus;
     }
-    public void setStatus(String status) {
-        this.status = status;
+    public void setReleaseStatus(String releaseStatus) {
+        this.releaseStatus = releaseStatus;
     }
 
-    public Date getReleaseDate() {
+    public String getReleaseDate() {
         return releaseDate;
     }
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
 
@@ -41,18 +43,18 @@ public class Release {
         this.createdAt = createdAt;
     }
 
-    public String getDescription() {
-        return description;
+    public String getReleaseDescription() {
+        return releaseDescription;
     }
-    public void setDescription(String description) {
-        this.description = description;
+    public void setReleaseDescription(String releaseDescription) {
+        this.releaseDescription = releaseDescription;
     }
 
-    public String getName() {
-        return name;
+    public String getReleaseName() {
+        return releaseName;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setReleaseName(String releaseName) {
+        this.releaseName = releaseName;
     }
 
     public int getId() {

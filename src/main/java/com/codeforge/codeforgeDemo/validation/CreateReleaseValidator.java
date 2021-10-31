@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 public class CreateReleaseValidator {
 
     public static void validate(Release release) throws ParameterValidationException {
-        if(StringUtils.isEmpty(release.getName())){
+        if(StringUtils.isEmpty(release.getReleaseName())){
             throw new ParameterValidationException("Release name must not empty!");
         }
 
-        if(StringUtils.isEmpty(release.getDescription())){
+        if(StringUtils.isEmpty(release.getReleaseDescription())){
             throw new ParameterValidationException("Release description must not empty!");
         }
 
-        if(ReleaseStatus.getReleaseStatusByName(release.getStatus()) == null){
+        if(ReleaseStatus.getReleaseStatusByName(release.getReleaseStatus()) == null){
             throw new ParameterValidationException("Release status must have a valid value!");
         }
 

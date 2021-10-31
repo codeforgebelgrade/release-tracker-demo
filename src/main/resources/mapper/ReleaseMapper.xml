@@ -2,21 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.codeforge.codeforgeDemo.mapper.ReleaseMapper">
+
     <select id="getAllReleases" resultMap="releaseMap">
-        <bind name="pattern" value="'%' + name + '%'" />
+
         SELECT * FROM Release
         <if test="status != null">
             WHERE Status = #{status}
             <if test = "releaseDate != null">
                 AND "releaseDate" = #{releaseDate}
             </if>
+            <if test = "name != null">
+                <bind name="pattern" value="'%' + name + '%'" />
+                AND Name LIKE #{pattern}
+            </if>
         </if>
 
         <if test = "releaseDate != null and status == null">
             WHERE "releaseDate" = #{releaseDate}
+            <if test = "name != null">
+                <bind name="pattern" value="'%' + name + '%'" />
+                AND Name LIKE #{pattern}
+            </if>
         </if>
 
         <if test = "releaseDate == null and status == null and name != null">
+            <bind name="pattern" value="'%' + name + '%'" />
             WHERE Name LIKE #{pattern}
         </if>
 
@@ -25,7 +35,7 @@
         </if>
     </select>
 
-    <resultMap id="releaseMap" type="com.codeforge.codeforgeDemo.model.dto.Release" autoMapping="true">
+    <resultMap id="releaseMap" type="com.codeforge.codeforgeDemo.model.entity.ReleaseEntity" autoMapping="true">
         <id property="id" column="Id"/>
         <id property="name" column="Name"/>
         <id property="status" column="Status"/>
@@ -35,17 +45,17 @@
         <id property="releaseDate" column="ReleaseDate"/>
     </resultMap>
 
-    <select id="getReleaseById" resultType="Release" parameterType="int">
+    <select id="getReleaseById" resultType="ReleaseEntity" parameterType="int">
         SELECT * FROM Release WHERE Id = #{id}
     </select>
 
-    <insert id="insertRelease" parameterType="Release">
+    <insert id="insertRelease" parameterType="ReleaseEntity">
         INSERT INTO
         Release(Name, Description, Status, "releaseDate") values(#{name},#{description}, #{status}, #{releaseDate})
     </insert>
 
-    <update id="updateRelease" parameterType="Release">
-        UPDATE Release SET Name = #{name}, Description = #{description}, "lastUpdateAt" = CURRENT_TIMESTAMP
+    <update id="updateRelease" parameterType="ReleaseEntity">
+        UPDATE Release SET Name = #{name}, Description = #{description}, "releaseDate" = #{releaseDate}, "lastUpdateAt" = CURRENT_TIMESTAMP
         WHERE Id = #{id}
     </update>
 
