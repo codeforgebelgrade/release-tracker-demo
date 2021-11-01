@@ -18,7 +18,7 @@ public class ReleaseEntityTransformer {
         entity.setName(release.getReleaseName());
         entity.setDescription(release.getReleaseDescription());
         entity.setStatus(release.getReleaseStatus());
-        if(!StringUtils.isEmpty(release.getReleaseDate())){
+        if(!StringUtils.isEmpty(release.getReleaseDate())) {
             entity.setReleaseDate(getDateFromStringPattern(release.getReleaseDate()));
         }
         return entity;
@@ -33,6 +33,10 @@ public class ReleaseEntityTransformer {
             release.setReleaseDescription(entity.getDescription());
             if (entity.getReleaseDate() != null) {
                 release.setReleaseDate(DateFormatUtils.format(entity.getReleaseDate(), "yyyy-MM-dd"));
+            }
+            release.setCreatedAt(DateFormatUtils.format(entity.getCreatedAt(), "yyyy-MM-dd HH:mm:ss"));
+            if(entity.getLastUpdateAt() != null) {
+                release.setLastUpdateAt(DateFormatUtils.format(entity.getLastUpdateAt(), "yyyy-MM-dd HH:mm:ss"));
             }
             return release;
         } else {

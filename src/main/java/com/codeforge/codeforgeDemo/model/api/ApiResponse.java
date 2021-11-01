@@ -45,7 +45,8 @@ public class ApiResponse {
         this.status = status;
     }
 
-    public ApiResponse(){
+    public ApiResponse(String responseStatus){
+        this.status = responseStatus;
         Date date = new Date();
         long timeInMilliseconds = date.getTime();
         Timestamp tStamp = new Timestamp(timeInMilliseconds);

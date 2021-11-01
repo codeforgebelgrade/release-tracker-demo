@@ -1,6 +1,7 @@
 package com.codeforge.codeforgeDemo.controller;
 
 import com.codeforge.codeforgeDemo.config.TracerConfig;
+import com.codeforge.codeforgeDemo.global.GlobalConstants;
 import com.codeforge.codeforgeDemo.global.exception.EntityNotFoundException;
 import com.codeforge.codeforgeDemo.global.exception.ParameterValidationException;
 import com.codeforge.codeforgeDemo.model.api.ApiResponse;
@@ -50,10 +51,10 @@ public class ReleaseController {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             parsedDate = dateFormat.parse(releaseDate);
         }
-        ApiResponse response = new ApiResponse();
         Span mapperSpan = tracer.buildSpan("mapper").asChildOf(baseSpan).start();
         List<Release> resultList = releaseService.findReleases(status, name, parsedDate, rows);
         mapperSpan.finish();
+        ApiResponse response = new ApiResponse(GlobalConstants.API_RESULT_SUCCESS);
         response.setEntity(resultList);
         baseSpan.finish();
         return ResponseEntity.ok().body(response);
@@ -65,9 +66,8 @@ public class ReleaseController {
         if(release == null) {
             throw new EntityNotFoundException("Release not found");
         }
-        ApiResponse response = new ApiResponse();
+        ApiResponse response = new ApiResponse(GlobalConstants.API_RESULT_SUCCESS);
         response.setEntity(release);
-        response.setStatus("SUCCESS");
         return ResponseEntity.ok().body(response);
     }
 
@@ -75,8 +75,7 @@ public class ReleaseController {
     public ResponseEntity<ApiResponse> insertRelease(@RequestBody Release release) throws ParameterValidationException {
         CreateReleaseValidator.validate(release);
         releaseService.saveRelease(release);
-        ApiResponse response = new ApiResponse();
-        response.setStatus("SUCCESS");
+        ApiResponse response = new ApiResponse(GlobalConstants.API_RESULT_SUCCESS);
         return ResponseEntity.ok().body(response);
     }
 
@@ -98,8 +97,7 @@ public class ReleaseController {
         Span mapperUpdateSpan = tracer.buildSpan("mapper-search").asChildOf(baseSpan).start();
         releaseService.updateReleaseInformation(releaseId, release);
         mapperUpdateSpan.finish();
-        ApiResponse response = new ApiResponse();
-        response.setStatus("SUCCESS");
+        ApiResponse response = new ApiResponse(GlobalConstants.API_RESULT_SUCCESS);
         baseSpan.finish();
         return ResponseEntity.ok().body(response);
     }
@@ -107,8 +105,7 @@ public class ReleaseController {
     @RequestMapping(value = "/{releaseId}", method = RequestMethod.DELETE, produces={"application/json"})
     public ResponseEntity<ApiResponse> removeRelease(@PathVariable int releaseId) {
         releaseService.removeRelease(releaseId);
-        ApiResponse response = new ApiResponse();
-        response.setStatus("SUCCESS");
+        ApiResponse response = new ApiResponse(GlobalConstants.API_RESULT_SUCCESS);
         return ResponseEntity.noContent().build();
     }
 

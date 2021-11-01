@@ -12,8 +12,8 @@ public class Release {
     private String releaseDescription;
     private String releaseStatus;
     private String releaseDate;
-    private Date lastUpdateAt;
-    private Date createdAt;
+    private String lastUpdateAt;
+    private String createdAt;
 
     public String getReleaseStatus() {
         return releaseStatus;
@@ -29,17 +29,17 @@ public class Release {
         this.releaseDate = releaseDate;
     }
 
-    public Date getLastUpdateAt() {
+    public String getLastUpdateAt() {
         return lastUpdateAt;
     }
-    public void setLastUpdateAt(Date lastUpdateAt) {
+    public void setLastUpdateAt(String lastUpdateAt) {
         this.lastUpdateAt = lastUpdateAt;
     }
 
-    public Date getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 

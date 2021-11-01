@@ -19,30 +19,26 @@ public class GlobalControllerExceptionHandler {
     public ResponseEntity<ApiResponse> handleException(Exception exception){
         if(exception instanceof ParameterValidationException) {
             logger.error("ParameterValidationException occured. Message: {}", exception.getMessage());
-            ApiResponse response = new ApiResponse();
-            response.setStatus("ERROR");
+            ApiResponse response = new ApiResponse(GlobalConstants.API_RESULT_ERROR);
             response.setDescription(exception.getMessage());
             return ResponseEntity.badRequest().body(response);
 
         } else if (exception instanceof EntityNotFoundException) {
             logger.error("EntityNotFoundException occured. Message: {}", exception.getMessage());
-            ApiResponse response = new ApiResponse();
-            response.setStatus("ERROR");
+            ApiResponse response = new ApiResponse(GlobalConstants.API_RESULT_ERROR);
             response.setDescription(exception.getMessage());
             return ResponseEntity.notFound().build();
 
         } else if (exception instanceof MethodArgumentTypeMismatchException) {
             logger.error("MethodArgumentTypeMismatchException occured. Message: {}", exception.getMessage());
-            ApiResponse response = new ApiResponse();
-            response.setStatus("ERROR");
+            ApiResponse response = new ApiResponse(GlobalConstants.API_RESULT_ERROR);
             response.setDescription(exception.getMessage());
             return ResponseEntity.badRequest().body(response);
 
         } else {
             logger.error("Exception occured. Message: {}", exception.getMessage());
             exception.printStackTrace();
-            ApiResponse response = new ApiResponse();
-            response.setStatus("ERROR");
+            ApiResponse response = new ApiResponse(GlobalConstants.API_RESULT_ERROR);
             response.setDescription(exception.getMessage());
             return ResponseEntity.internalServerError().body(response);
         }
