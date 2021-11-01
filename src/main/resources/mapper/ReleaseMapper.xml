@@ -52,6 +52,7 @@
     <insert id="insertRelease" parameterType="ReleaseEntity">
         INSERT INTO
         Release(Name, Description, Status, "releaseDate") values(#{name},#{description}, #{status}, #{releaseDate})
+
     </insert>
 
     <update id="updateRelease" parameterType="ReleaseEntity">
