@@ -36,7 +36,7 @@ public class ReleaseController {
     private Tracer tracer = TracerConfig.initTracer("codeforgeDemo");
 
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET, produces={"application/json"})
     public ResponseEntity<ApiResponse> getReleases(@RequestParam(required = false) String status,
                                       @RequestParam(required = false) String name,
                                       @RequestParam(required = false, name = "release_date") String releaseDate,
@@ -75,7 +75,7 @@ public class ReleaseController {
         return ResponseEntity.ok().body(response);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, produces={"application/json"})
     public ResponseEntity<ApiResponse> insertRelease(@RequestBody Release release) throws ParameterValidationException {
         Span baseSpan = tracer.buildSpan("update-release").start();
         Span validatorSpan = tracer.buildSpan("validator").asChildOf(baseSpan).start();
@@ -89,7 +89,7 @@ public class ReleaseController {
         return ResponseEntity.ok().body(response);
     }
 
-    @RequestMapping(value = "/{releaseId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{releaseId}", method = RequestMethod.PUT, produces={"application/json"})
     public ResponseEntity<ApiResponse> updateRelease(@PathVariable int releaseId, @RequestBody Release release)
             throws ParameterValidationException, EntityNotFoundException {
 
