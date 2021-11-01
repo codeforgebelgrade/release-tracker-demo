@@ -51,9 +51,9 @@ public class ReleaseController {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             parsedDate = dateFormat.parse(releaseDate);
         }
-        Span mapperSpan = tracer.buildSpan("mapper").asChildOf(baseSpan).start();
+        Span serviceSpan = tracer.buildSpan("service").asChildOf(baseSpan).start();
         List<Release> resultList = releaseService.findReleases(status, name, parsedDate, rows);
-        mapperSpan.finish();
+        serviceSpan.finish();
         ApiResponse response = new ApiResponse(GlobalConstants.API_RESULT_SUCCESS);
         response.setEntity(resultList);
         baseSpan.finish();
@@ -62,20 +62,30 @@ public class ReleaseController {
 
     @RequestMapping(value = "/{releaseId}", method = RequestMethod.GET, produces={"application/json"})
     public ResponseEntity<ApiResponse> getSingleRelease(@PathVariable int releaseId) throws EntityNotFoundException {
+        Span baseSpan = tracer.buildSpan("get-single-release").start();
+        Span serviceSpan = tracer.buildSpan("service").asChildOf(baseSpan).start();
         Release release = releaseService.findReleaseById(releaseId);
         if(release == null) {
             throw new EntityNotFoundException("Release not found");
         }
+        serviceSpan.finish();
         ApiResponse response = new ApiResponse(GlobalConstants.API_RESULT_SUCCESS);
         response.setEntity(release);
+        baseSpan.finish();
         return ResponseEntity.ok().body(response);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<ApiResponse> insertRelease(@RequestBody Release release) throws ParameterValidationException {
+        Span baseSpan = tracer.buildSpan("update-release").start();
+        Span validatorSpan = tracer.buildSpan("validator").asChildOf(baseSpan).start();
         CreateReleaseValidator.validate(release);
+        validatorSpan.finish();
+        Span serviceSpan = tracer.buildSpan("service").asChildOf(baseSpan).start();
         releaseService.saveRelease(release);
+        serviceSpan.finish();
         ApiResponse response = new ApiResponse(GlobalConstants.API_RESULT_SUCCESS);
+        baseSpan.finish();
         return ResponseEntity.ok().body(response);
     }
 
@@ -84,7 +94,7 @@ public class ReleaseController {
             throws ParameterValidationException, EntityNotFoundException {
 
         Span baseSpan = tracer.buildSpan("update-release").start();
-        Span mapperSearchSpan = tracer.buildSpan("find-release").asChildOf(baseSpan).start();
+        Span mapperSearchSpan = tracer.buildSpan("service-search").asChildOf(baseSpan).start();
         Release existingRelease = releaseService.findReleaseById(releaseId);
         mapperSearchSpan.finish();
         if(existingRelease == null) {
@@ -94,9 +104,9 @@ public class ReleaseController {
         Span validatorSpan = tracer.buildSpan("validator").asChildOf(baseSpan).start();
         CreateReleaseValidator.validate(release);
         validatorSpan.finish();
-        Span mapperUpdateSpan = tracer.buildSpan("mapper-search").asChildOf(baseSpan).start();
+        Span serivceSpan = tracer.buildSpan("service").asChildOf(baseSpan).start();
         releaseService.updateReleaseInformation(releaseId, release);
-        mapperUpdateSpan.finish();
+        serivceSpan.finish();
         ApiResponse response = new ApiResponse(GlobalConstants.API_RESULT_SUCCESS);
         baseSpan.finish();
         return ResponseEntity.ok().body(response);
@@ -104,8 +114,12 @@ public class ReleaseController {
 
     @RequestMapping(value = "/{releaseId}", method = RequestMethod.DELETE, produces={"application/json"})
     public ResponseEntity<ApiResponse> removeRelease(@PathVariable int releaseId) {
+        Span baseSpan = tracer.buildSpan("delete-release").start();
+        Span serviceSpan = tracer.buildSpan("service").asChildOf(baseSpan).start();
         releaseService.removeRelease(releaseId);
+        serviceSpan.finish();
         ApiResponse response = new ApiResponse(GlobalConstants.API_RESULT_SUCCESS);
+        baseSpan.finish();
         return ResponseEntity.noContent().build();
     }
 
