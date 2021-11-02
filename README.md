@@ -85,4 +85,21 @@ because there are still benefits to having detailed information about what is go
 
 ### Raygun support
 
+The application also implements [Raygun](https://raygun.com/) for crash reporting. Raygun provides much more than crash 
+reporting, but I wanted to showcase that particular feature. When maintaining the application in production, it is 
+very important to have timely updates whenever something bad happens. With Raygun (or similar tools), you can be notified 
+whenever an exception is thrown (via Slack integration, email or something else). Not only that, but you also have a nice 
+dashboard that you can use to manage and track all your exceptions:
+
+![img_2.png](img_2.png)
+
+In order to use RAygun, you need to have it enabled and you also have to create an account ad paste your client ID 
+to the corresponding `application.properties` flags:
+````
+raygun.enabled=false
+raygun.clientId=YOUR_RAYGUN_ID
+````
+To enable Raygun. simply set `raygun.enabled` property to `true` and replace the placeholder string for the client ID 
+with your Raygun client ID. 
+
 ### Potential improvements
