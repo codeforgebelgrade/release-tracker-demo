@@ -79,7 +79,9 @@ Once you look back at the Jaeger UI, you should be able to see each of these req
 ![img_1.png](img_1.png)
 
 For example, on this picture, we see how long each part of the update request took, for every method/component 
-that was involved.
+that was involved. This way, we can spot issues (for example, the operations that take too much time to complete). In 
+the same time, it is worth noting that there are benefits of having tracing implemented even in monoliths/single services,
+because there are still benefits to having detailed information about what is going on inside your application.
 
 ### Raygun support
 
