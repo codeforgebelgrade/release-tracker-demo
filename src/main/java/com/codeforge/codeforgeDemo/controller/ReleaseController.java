@@ -1,6 +1,6 @@
 package com.codeforge.codeforgeDemo.controller;
 
-import com.codeforge.codeforgeDemo.config.TracerConfig;
+import com.codeforge.codeforgeDemo.global.config.TracerConfig;
 import com.codeforge.codeforgeDemo.global.GlobalConstants;
 import com.codeforge.codeforgeDemo.global.exception.EntityNotFoundException;
 import com.codeforge.codeforgeDemo.global.exception.ParameterValidationException;
@@ -41,6 +41,7 @@ public class ReleaseController {
         Date parsedDate = null;
         if(!StringUtils.isEmpty(releaseDate)) {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            dateFormat.setLenient(false);
             parsedDate = dateFormat.parse(releaseDate);
         }
         Span serviceSpan = tracer.buildSpan("service").asChildOf(baseSpan).start();

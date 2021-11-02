@@ -1,4 +1,4 @@
-package com.codeforge.codeforgeDemo.config;
+package com.codeforge.codeforgeDemo.global.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;

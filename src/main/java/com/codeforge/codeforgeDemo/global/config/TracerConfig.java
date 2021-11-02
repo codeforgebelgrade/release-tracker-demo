@@ -1,4 +1,4 @@
-package com.codeforge.codeforgeDemo.config;
+package com.codeforge.codeforgeDemo.global.config;
 
 import io.jaegertracing.Configuration;
 import io.jaegertracing.internal.JaegerTracer;
