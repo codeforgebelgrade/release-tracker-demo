@@ -93,7 +93,7 @@ dashboard that you can use to manage and track all your exceptions:
 
 ![img_2.png](img_2.png)
 
-In order to use RAygun, you need to have it enabled and you also have to create an account ad paste your client ID 
+In order to use Raygun, you need to have it enabled, and you also have to create an account ad paste your client ID 
 to the corresponding `application.properties` flags:
 ````
 raygun.enabled=false
@@ -101,5 +101,30 @@ raygun.clientId=YOUR_RAYGUN_ID
 ````
 To enable Raygun. simply set `raygun.enabled` property to `true` and replace the placeholder string for the client ID 
 with your Raygun client ID. 
+
+### Load testing with Locust
+
+In many cases, it is very important to benchmark your application get the sense of what are its limits. Load testing can 
+be particularly helpful here, because with the right tools, you can simulate many users in real-world scenarios and look 
+for stability or performance issues. This is especially important for applications that will be used by large number of 
+users every single day. One of the tools that can help you with this is Locust, which is a Python tool. I know a bit of 
+Python and I've used Locust on some other projects, so I found it to be a very nice tool for this particular use case. 
+
+Included in the project is a sample script, called `locust.py`, that can be started in order to simulate a request
+(inserting release data in this case). To start it, you need to have Python and Locust installed and run the following 
+command in the folder where the Locust file is located:
+```
+locust -f locustfile.py --host=http://localhost:8081
+```
+Of course, you need to have your application already up and running (in this case on port 8081). The Locust UI 
+will be available on `http://localhost:8089` and you will need to type the number of users and spawn rate. After that, 
+when the test starts, you should be able to see the stats:
+
+![img_3.png](img_3.png)
+
+![img_4.png](img_4.png)
+
+My opinion is that tools such as this one are very good for integration testing, where you inspect the behaviour of the 
+system as a whole. 
 
 ### Potential improvements
