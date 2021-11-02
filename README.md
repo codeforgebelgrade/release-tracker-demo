@@ -51,6 +51,11 @@ Postgres setup.
 
 ### Swagger documentation
 
+The application implements Swagger and exposes Swagger UI. I kept it pretty basic for the purpose of this example. 
+On the picture below, you can see the list of endpoints that the application exposes: 
+
+![img.png](img.png)
+
 ### Jaeger-tracing support
 
 ### Raygun support
