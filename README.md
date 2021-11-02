@@ -58,6 +58,29 @@ On the picture below, you can see the list of endpoints that the application exp
 
 ### Jaeger-tracing support
 
+Many projects I've worked on during the past few years, were parts of the microservice ecosystem - so having all 
+relevant data about what's going on between (and inside) these services is extremely important if you want to 
+have proper maintenance and quick reaction to production issues, but also if you care about the performance and 
+want to remove bottlenecks in your applications. This is where tracing tools come in. Most powerful one I've used was 
+probably Datadog, but for this example I've decided to use [Jaeger-Tracing](https://www.jaegertracing.io/). It is 
+pretty easy to set up, but it requires a bit of manual work in order to properly wrap your code in spans. **NOTE**: the 
+example that you see here is a basic one that is good for showcasing the general concept - but there is a better 
+way of doing it. 
+
+After you install Maven dependencies and create your spans, you need to have Jaeger docker container running on your 
+machine. The container can be started using the following command:
+```
+docker run --rm -p 6831:6831/udp -p 6832:6832/udp -p 16686:16686 jaegertracing/all-in-one:1.7 --log-level=debug
+```
+This will result in having the Jaeger UI on [http://localhost:16686/](http://localhost:16686/). With this UI up and 
+running and with your application ready, all you need to do is to start your application ad fire up a few requests. 
+Once you look back at the Jaeger UI, you should be able to see each of these requests in detail:
+
+![img_1.png](img_1.png)
+
+For example, on this picture, we see how long each part of the update request took, for every method/component 
+that was involved.
+
 ### Raygun support
 
 ### Potential improvements
