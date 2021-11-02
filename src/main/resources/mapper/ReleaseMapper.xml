@@ -56,7 +56,7 @@
     </insert>
 
     <update id="updateRelease" parameterType="ReleaseEntity">
-        UPDATE Release SET Name = #{name}, Description = #{description}, "releaseDate" = #{releaseDate}, "lastUpdateAt" = CURRENT_TIMESTAMP
+        UPDATE Release SET Name = #{name}, Description = #{description}, "releaseDate" = #{releaseDate}, Status = #{status}, "lastUpdateAt" = CURRENT_TIMESTAMP
         WHERE Id = #{id}
     </update>
 

@@ -23,11 +23,11 @@ public enum ReleaseStatus {
         return name;
     }
 
-    public static ReleaseStatus getReleaseStatusByName(String name){
+    public static ReleaseStatus getReleaseStatusByName(String status){
         ReleaseStatus result = null;
-        if(!StringUtils.isEmpty(name)) {
+        if(!StringUtils.isEmpty(status)) {
             for (ReleaseStatus releaseStatus : values()) {
-                if (releaseStatus.getName().equals(name.trim())) {
+                if (releaseStatus.getName().equals(status.trim())) {
                     result = releaseStatus;
                     break;
                 }
@@ -35,5 +35,4 @@ public enum ReleaseStatus {
         }
         return result;
     }
-
 }
