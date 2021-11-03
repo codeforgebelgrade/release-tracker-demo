@@ -159,5 +159,5 @@ of the created object with it. I actually tried to do that using RETURNING state
 unfortunately, I could not make it work with MyBatis (I probably missed something in the setup).
 - Adding more unit tests for the Controller and Service levels
 - Creating a Docker container for the whole project
-- Add a few Spring profile (I;ve used those in the past and they are actually really good for separating your configuration for 
+- Add a few Spring profiles (I've used those in the past and they are great for separating your configuration for 
 different environments)
