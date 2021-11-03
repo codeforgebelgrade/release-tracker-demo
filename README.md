@@ -69,7 +69,7 @@ it may not be the best way to go on the real-world project. I would probably mov
 test suite, maybe even written in another language. Regarding the tests here, they would have to change and I would use mocks 
 in order to simulate the behaviour of the dependencies. 
 
-Speaking o mocks, one of the things I've used here is constructor-level injection, since this makes mocking much easier. 
+Speaking of mocks, one of the things I've used here is constructor-level injection, since this makes mocking much easier. 
 Writing tests can become increasingly hard if you have multiple @Autowired beans and this technique can really help here.
 
 ### Swagger documentation
