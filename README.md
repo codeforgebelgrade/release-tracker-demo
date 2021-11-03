@@ -6,7 +6,7 @@ a simple Spring Boot application that manages software releases. The application
 API endpoints that will allow the user to manage the releases. 
 
 The application uses [PostgreSQL](https://www.postgresql.org/) as the database. Before you start, you will need to create the database 
-and update the connection string and other database properties in the `application.settings` file. I won't 
+and update the connection string and other database properties in the `application.properties` file. I won't 
 cover database setup here, but I will provide the SQL needed to create the database once you have installed 
 PostgreSQL on your machine. Here is the SQL script:
 
@@ -40,14 +40,37 @@ ALTER TABLE public.release
 ```
 Once you have the database created, you need to update your database properties in `application.settings` file:
 ```
-spring.datasource.url = jdbc:postgresql://localhost:5432/codeforge
-spring.datasource.username = postgres
-spring.datasource.password = YOUR_DB_PWD
-spring.datasource.driver-class-name =org.postgresql.Driver
+spring.datasource.url=jdbc:postgresql://localhost:5432/codeforge
+spring.datasource.username=postgres
+spring.datasource.password=YOUR_DB_PWD
+spring.datasource.driver-class-name=org.postgresql.Driver
 ```
 Of course, `spring.datasource.url` will point out to the database on your machine (or you can target a remote 
 machine, or even a Docker container). Password will be the same as the one that you have chosen during the 
 Postgres setup.
+
+### Implementation details and general notes on project
+
+One of the main reasons why I have chosen MyBatis over something else is that MyBatis forces a SQL-first approach, 
+which not only gives you more control over the SQL query that you are writing, but also makes it easy for you to 
+test that SQL query individually. This is something which may not be the case with ORMs. That doesn't mean that ORMs 
+are bad - however it does mean that over-relying on ORM can distance a developer from the SQL and the database level-decisions. 
+It may also lead to various issues when it comes to optimizing your SQL queries, because sometimes it can lead to a 
+situation where are not sure what you are optimizing: usage of ORM or an SQL query. As a general rule, I think that 
+complex queries should always be properly tested and reviewed (especially if you have DB devs in your team), which means 
+that you have to have as much control as possible over them. MyBatis enables you to do just that in most cases (and modifying 
+query to conform to MyBatis format is usually trivial).
+
+Speaking of testing, the tests I have written for the service (besides the unit ones, for validators) are actually 
+integration-like tests because they do require the database to be set up (meaning they are testing the whole thing, no 
+mocking involved). I have done this because I wanted to look at the application as a "black box" and see how it responds 
+to various requests. However, while this may be sufficient in the scope of this demo (due to the small size of the project) 
+it may not be the best way to go on the real-world project. I would probably move integration tests to a completely separated 
+test suite, maybe even written in another language. Regarding the tests here, they would have to change and I would use mocks 
+in order to simulate the behaviour of the dependencies. 
+
+Speaking o mocks, one of the things I've used here is constructor-level injection, since this makes mocking much easier. 
+Writing tests can become increasingly hard if you have multiple @Autowired beans and this technique can really help here.
 
 ### Swagger documentation
 
@@ -128,3 +151,13 @@ My opinion is that tools such as this one are very good for integration testing,
 system as a whole. 
 
 ### Potential improvements
+
+There are several things that I would consider a good improvement:
+
+- Changing the response code of the endpoint that handles the insertion of objects to `201 CREATED` and returning an id 
+of the created object with it. I actually tried to do that using RETURNING statement that PostgreSQL implements, but 
+unfortunately, I could not make it work with MyBatis (I probably missed something in the setup).
+- Adding more unit tests for the Controller and Service levels
+- Creating a Docker container for the whole project
+- Add a few Spring profile (I;ve used those in the past and they are actually really good for separating your configuration for 
+different environments)
