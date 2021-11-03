@@ -6,10 +6,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -22,14 +24,14 @@ import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CodeforgeDemoApplicationTests {
 
 	private final String jsonPayloadValid = "{\n" +
 			"    \"releaseName\":\"METAL IS WAR\",\n" +
 			"    \"releaseDescription\":\"111\",\n" +
 			"    \"releaseDate\":\"2021-12-01\",\n" +
-			"    \"releaseStatus\":\"QA Done on DEV\"\n" +
+			"    \"releaseStatus\":\"Created\"\n" +
 			"}";
 
 	@LocalServerPort
@@ -39,18 +41,12 @@ class CodeforgeDemoApplicationTests {
 	private TestRestTemplate testRestTemplate;
 
 	@Test
+	@Order(1)
 	void contextLoads() {
 	}
 
 	@Test
-	public void getSampleResponseTest() {
-
-		ResponseEntity<Release> response = this.testRestTemplate.exchange("http://localhost:" + port + "/releases/65",
-				HttpMethod.GET, null, Release.class);
-		Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-	}
-
-	@Test
+	@Order(2)
 	public void insertSingleReleaseTest() {
 
 		var headers = new HttpHeaders();
@@ -62,10 +58,26 @@ class CodeforgeDemoApplicationTests {
 	}
 
 	/**
-	 * Updates the last entry from the collection
+	 * Checks
+	 */
+	@Test
+	@Order(3)
+	public void searchReleaseTest() {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		ResponseEntity<ApiResponse> response = this.testRestTemplate.exchange("http://localhost:" + port + "/releases/",
+				HttpMethod.GET, null, ApiResponse.class);
+		List<LinkedHashMap<String, ?>> objectList = (List<LinkedHashMap<String, ?>>) response.getBody().getEntity();
+		List<Release> releaseList = objectMapper.convertValue(objectList, new TypeReference<List<Release>> () {});
+		Assert.assertTrue(releaseList.size() > 0);
+	}
+
+	/**
+	 * Checks weather at least one result is returned from the database
 	 * @throws JsonProcessingException
 	 */
 	@Test
+	@Order(4)
 	public void updateReleaseTest() throws JsonProcessingException {
 
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -93,6 +105,7 @@ class CodeforgeDemoApplicationTests {
 	 * Deletes the last entry from the collection
 	 */
 	@Test
+	@Order(5)
 	public void deleteReleaseTest() {
 
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -109,7 +122,4 @@ class CodeforgeDemoApplicationTests {
 		Assert.assertEquals(HttpStatus.NO_CONTENT, deletionResponse.getStatusCode());
 
 	}
-
-	
-
 }

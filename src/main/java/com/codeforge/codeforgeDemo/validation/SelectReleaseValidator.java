@@ -14,7 +14,7 @@ public class SelectReleaseValidator {
     public static void validate(String status, String releaseDate, Integer rows) throws ParameterValidationException {
         if(!StringUtils.isEmpty(status)) {
             if (ReleaseStatus.getReleaseStatusByName(status) == null) {
-                throw new ParameterValidationException("Release status must have a valid value!");
+                throw new ParameterValidationException(GlobalConstants.INVALID_RELEASE_STATUS);
             }
         }
 
